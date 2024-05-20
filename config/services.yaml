@@ -1,0 +1,20 @@
+# config/services.yaml
+
+parameters:
+    default_locale: 'en' # You can change 'en' to your preferred locale
+
+services:
+    # Default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $defaultLocale: '%default_locale%' # Bind the default locale parameter
+
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Tests,Kernel.php}'
+
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']

@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: sulu-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: strong_root_password
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  php:
+    build:
+      context: ./php
+    volumes:
+      - ../:/var/www/html:cached
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: mysql://db_user:123@database:3306/db_name?serverVersion=5.7.32&charset=utf8mb4
+    command: php -S 0.0.0.0:8000 -t /var/www/html/public
+
+volumes:
+  db_data:
